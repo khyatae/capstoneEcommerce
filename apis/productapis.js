@@ -94,7 +94,25 @@ const reduceFromCart = async (req, res) => {
   }
 };
 
-const buyNow = () => {};
+const buyNow = async (req, res) => {
+  const { u_id } = req.body;
+  try {
+    const cart = await Cart.findOne({ u_id }).populate("products.product_id");
+    if (!cart || cart.products.length === 0) {
+      return res.send("cart is empty");
+    }
+    const total_cost = cart.products.reduce((total, product) => {
+      return total + product.product_id.p_cost * product.count;
+    }, 0);
+
+    cart.products = [];
+    await cart.save();
+    console.log("Order placed successfully");
+    res.send("order placed successfully. Total cost is " + total_cost);
+  } catch (e) {
+    res.status(500).json({ message: "error" });
+  }
+};
 
 module.exports = {
   createUser,
