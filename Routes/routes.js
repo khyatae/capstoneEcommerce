@@ -8,6 +8,7 @@ router.get("/fetch", productApi.showAllProducts);
 router.post("/insertUser", productApi.createUser);
 router.post("/login", productApi.login);
 //update a record
+router.post("/createProduct", productApi.createProduct);
 router.post("/insertProduct", productApi.addToCart);
 //delete a record
 router.put("/deleteProduct", productApi.reduceFromCart);

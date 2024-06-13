@@ -65,6 +65,24 @@ const addToCart = async (req, res) => {
   }
 };
 
+const createProduct = async (req, res) => {
+  try {
+    const obj = req.body;
+    console.log(obj);
+    const existingProduct = await Product.findOne(obj);
+    if (existingProduct) {
+      console.log("product already exists");
+      res.status(400).send("Product already exists" + existingUser);
+    }
+    const newProduct = Product.create(obj);
+    const data = (await newProduct).save();
+    console.log("product inserted");
+    res.send("product inserted");
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const reduceFromCart = async (req, res) => {
   const { u_id, p_id } = req.body;
   try {
@@ -121,4 +139,5 @@ module.exports = {
   addToCart,
   reduceFromCart,
   buyNow,
+  createProduct,
 };
