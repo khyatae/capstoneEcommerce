@@ -39,6 +39,36 @@ const showAllProducts = async (req, res) => {
   res.send(products);
 };
 
+const showProduct = async (req, res) => {
+  try {
+    const product = await Product.findOne({ p_id: req.params.id });
+    if (product) {
+      res.send(product);
+      conosle.log("product found");
+    } else {
+      res.send("no product found");
+      console.log("product not found");
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  try {
+    const product = await Product.findOneAndDelete({ p_id: req.body.p_id });
+    if (product) {
+      res.send("product deleted");
+      console.log("product deleted");
+    } else {
+      res.send("no product found");
+      console.log("product not found");
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const addToCart = async (req, res) => {
   const { u_id, p_id } = req.body;
   try {
@@ -78,6 +108,25 @@ const createProduct = async (req, res) => {
     const data = (await newProduct).save();
     console.log("product inserted");
     res.send("product inserted");
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const updateProduct = async (req, res) => {
+  try {
+    const obj = req.body;
+    const product = await Product.findOneAndUpdate(
+      { p_id: req.body.p_id },
+      obj
+    );
+    if (!product) {
+      console.log("product not found");
+      res.send("product not found");
+    } else {
+      console.log("product update successful");
+      res.send("product update successful");
+    }
   } catch (e) {
     console.log(e);
   }
@@ -140,4 +189,7 @@ module.exports = {
   reduceFromCart,
   buyNow,
   createProduct,
+  updateProduct,
+  deleteProduct,
+  showProduct,
 };
